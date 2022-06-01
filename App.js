@@ -12,14 +12,24 @@ import Edit from './src/screens/edit';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const user = false; // Not authenticated
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="Create" component={Create} />
-        <Stack.Screen name="Edit" component={Edit} />
+        {user ? (
+          <>
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Edit" component={Edit} />
+            <Stack.Screen name="Create" component={Create} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="SignIn" component={SignIn} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+          </>
+        )
+
+        }
       </Stack.Navigator>
     </NavigationContainer>
   );
