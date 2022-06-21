@@ -15,6 +15,9 @@ export default function SignUp() {
                 <Input placeholder="Password" secureTextEntry />
                 <Input placeholder="Full Name" />
                 <Input placeholder="Age" />
+                <View style={{ marginVertical: 20 }}>
+                    <Text>Select Gender</Text>
+                </View>
                 {genderOptions.map((option) => {
                     const selected = option === gender;
                     return (
