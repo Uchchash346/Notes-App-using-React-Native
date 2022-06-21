@@ -2,19 +2,58 @@ import { View, SafeAreaView, Text, Image, TextInput, StyleSheet, Pressable } fro
 import React, { useState } from 'react'
 import Button from '../components/Button'
 import Input from '../components/Input'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 
+const auth = getAuth();
 const genderOptions = ["Male", "Female"];
+
 export default function SignUp() {
     const [gender, setGender] = useState(null);
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [name, setName] = React.useState('');
+    const [age, setAge] = React.useState('');
+
+    const auth = getAuth();
+    const signup = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                console.log("User Created", user);
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // ..
+            });
+    }
+
+    // const signup = () => {
+    //     // 1. Create a new user
+    //     createUserWithEmailAndPassword(auth, email, password)
+    //         .then((userCredential) => {
+    //             // signed in
+    //             const user = userCredential.user;
+    //             console.log("User Created", user);
+    //             // Then we create the profile in the database
+    //         })
+    //         .catch((error) => {
+    //             const errorCode = error.code;
+    //             const errorMessage = error.message;
+    //         })
+    // }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
             <View style={{ paddingHorizontal: 16, paddingVertical: 25 }}>
-                <Input placeholder="Email Address" />
-                <Input placeholder="Password" secureTextEntry />
-                <Input placeholder="Full Name" />
-                <Input placeholder="Age" />
+                <Input placeholder="Email Address" onChangeText={(text) => setEmail(text)} />
+                <Input placeholder="Password" secureTextEntry onChangeText={(text) => setPassword(text)} />
+                <Input placeholder="Full Name" onChangeText={(text) => setName(text)} />
+                <Input placeholder="Age" onChangeText={(text) => setAge(text)} />
                 <View style={{ marginVertical: 20 }}>
                     <Text>Select Gender</Text>
                 </View>
@@ -36,7 +75,12 @@ export default function SignUp() {
             </View>
 
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-                <Button title={"Sign Up"} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />
+                <Button
+                    title={"Sign Up"}
+                    customStyles={{ alignSelf: 'center', marginBottom: 60 }}
+                    onPress={signup}
+                />
+
                 <Pressable>
                     <Text>Already have an account?{" "}
                         <Text style={{ color: 'green', fontWeight: 'bold' }}>Sign In</Text>
