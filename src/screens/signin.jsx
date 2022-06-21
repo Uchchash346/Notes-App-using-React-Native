@@ -1,7 +1,7 @@
 import { View, SafeAreaView, Text, Image, TextInput, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import Button from '../components/Button';
-import Input from '../components/Input'
+import Input from '../components/Input';
 
 export default function SignIn({ navigation }) {
     return (
