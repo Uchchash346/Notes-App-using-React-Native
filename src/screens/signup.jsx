@@ -1,30 +1,37 @@
 import { View, SafeAreaView, Text, Image, TextInput, StyleSheet, Pressable } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '../components/Button'
 import Input from '../components/Input'
 
+
+const genderOptions = ["Male", "Female"];
 export default function SignUp() {
-    const selected = true;
+    const [gender, setGender] = useState(null);
     return (
         <SafeAreaView style={{ flex: 1 }}>
+
             <View style={{ paddingHorizontal: 16, paddingVertical: 25 }}>
                 <Input placeholder="Email Address" />
                 <Input placeholder="Password" secureTextEntry />
                 <Input placeholder="Full Name" />
                 <Input placeholder="Age" />
-                <Pressable style={styles.radioContainer}>
-                    <View style={styles.outerCircle}>
-                        <View style={styles.innerCircle}></View>
-                    </View>
-                    <Text style={styles.radioText}>Male</Text>
-                </Pressable>
-                <Pressable style={styles.radioContainer}>
-                    <View style={[styles.outerCircle, selected && styles.selectedOuterCircle]}>
-                        <View style={[styles.innerCircle, selected && styles.selectedInnerCircle]}></View>
-                    </View>
-                    <Text style={styles.radioText}>Feale</Text>
-                </Pressable>
+                {genderOptions.map((option) => {
+                    const selected = option === gender;
+                    return (
+                        <Pressable
+                            onPress={() => setGender(option)}
+                            key={option}
+                            style={styles.radioContainer}>
+                            <View style={[styles.outerCircle, selected && styles.selectedOuterCircle]}>
+                                <View style={[styles.innerCircle, selected && styles.selectedInnerCircle]}></View>
+                            </View>
+                            <Text style={styles.radioText}>{option}</Text>
+                        </Pressable>
+                    )
+                })
+                }
             </View>
+
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                 <Button title={"Sign Up"} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />
                 <Pressable>
@@ -33,6 +40,7 @@ export default function SignUp() {
                     </Text>
                 </Pressable>
             </View>
+
         </SafeAreaView>
     )
 }
