@@ -5,7 +5,7 @@ import Input from '../components/Input'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 
-const auth = getAuth();
+// const auth = getAuth();
 const genderOptions = ["Male", "Female"];
 
 export default function SignUp() {
@@ -16,38 +16,24 @@ export default function SignUp() {
     const [age, setAge] = React.useState('');
 
     const auth = getAuth();
+    
     const signup = () => {
+        // 1. Create a new user
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                // Signed in 
+                // signed in
                 const user = userCredential.user;
                 console.log("User Created", user);
-                // ...
+                // Then we create the profile in the database
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                // ..
-            });
-    }
-
-    // const signup = () => {
-    //     // 1. Create a new user
-    //     createUserWithEmailAndPassword(auth, email, password)
-    //         .then((userCredential) => {
-    //             // signed in
-    //             const user = userCredential.user;
-    //             console.log("User Created", user);
-    //             // Then we create the profile in the database
-    //         })
-    //         .catch((error) => {
-    //             const errorCode = error.code;
-    //             const errorMessage = error.message;
-    //         })
-    // }
-
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
+            })
+        }
+        
+        return (
+            <SafeAreaView style={{ flex: 1 }}>
 
             <View style={{ paddingHorizontal: 16, paddingVertical: 25 }}>
                 <Input placeholder="Email Address" onChangeText={(text) => setEmail(text)} />
@@ -61,9 +47,9 @@ export default function SignUp() {
                     const selected = option === gender;
                     return (
                         <Pressable
-                            onPress={() => setGender(option)}
-                            key={option}
-                            style={styles.radioContainer}>
+                        onPress={() => setGender(option)}
+                        key={option}
+                        style={styles.radioContainer}>
                             <View style={[styles.outerCircle, selected && styles.selectedOuterCircle]}>
                                 <View style={[styles.innerCircle, selected && styles.selectedInnerCircle]}></View>
                             </View>
@@ -71,7 +57,7 @@ export default function SignUp() {
                         </Pressable>
                     )
                 })
-                }
+            }
             </View>
 
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -79,7 +65,7 @@ export default function SignUp() {
                     title={"Sign Up"}
                     customStyles={{ alignSelf: 'center', marginBottom: 60 }}
                     onPress={signup}
-                />
+                    />
 
                 <Pressable>
                     <Text>Already have an account?{" "}
@@ -99,7 +85,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         marginBottom: 25,
     },
-
+    
     radioContainer: {
         flexDirection: "row",
         alignItems: "center",

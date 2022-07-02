@@ -10,6 +10,7 @@ import Create from './src/screens/create';
 import Edit from './src/screens/edit';
 import { initializeApp } from "firebase/app";
 
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyATtBnUy9b2lI2Q-sFfho_V2-pkkCjmcRo",
@@ -22,6 +23,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
 
 const AppTheme = {
   ...DefaultTheme,
