@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, collection } from "firebase/firestore";
+import { db } from '../../App';
+import { showMessage } from 'react-native-flash-message'
 
 
 // const auth = getAuth();
@@ -16,25 +19,31 @@ export default function SignUp() {
     const [age, setAge] = React.useState('');
 
     const auth = getAuth();
-    
-    const signup = () => {
-        // 1. Create a new user
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // signed in
-                const user = userCredential.user;
-                console.log("User Created", user);
-                // Then we create the profile in the database
+
+    const signup = async () => {
+        try {
+            // 1. Create a new user with email and password
+            const result = await createUserWithEmailAndPassword(auth, email, password);
+            // 2. add user profile to database
+            await addDoc(collection(db, 'users'), {
+                name: name,
+                email: email,
+                age: age,
+                uid: result.user.uid,
             })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+            console.log("result --> ", result);
+        } catch (error) {
+            console.log("error ---> ", error);
+            showMessage({
+                message: 'Error!',
+                type: "danger",
             })
         }
-        
-        return (
-            <SafeAreaView style={{ flex: 1 }}>
 
+    }
+
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={{ paddingHorizontal: 16, paddingVertical: 25 }}>
                 <Input placeholder="Email Address" onChangeText={(text) => setEmail(text)} />
                 <Input placeholder="Password" secureTextEntry onChangeText={(text) => setPassword(text)} />
@@ -47,9 +56,9 @@ export default function SignUp() {
                     const selected = option === gender;
                     return (
                         <Pressable
-                        onPress={() => setGender(option)}
-                        key={option}
-                        style={styles.radioContainer}>
+                            onPress={() => setGender(option)}
+                            key={option}
+                            style={styles.radioContainer}>
                             <View style={[styles.outerCircle, selected && styles.selectedOuterCircle]}>
                                 <View style={[styles.innerCircle, selected && styles.selectedInnerCircle]}></View>
                             </View>
@@ -57,7 +66,7 @@ export default function SignUp() {
                         </Pressable>
                     )
                 })
-            }
+                }
             </View>
 
             <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -65,7 +74,7 @@ export default function SignUp() {
                     title={"Sign Up"}
                     customStyles={{ alignSelf: 'center', marginBottom: 60 }}
                     onPress={signup}
-                    />
+                />
 
                 <Pressable>
                     <Text>Already have an account?{" "}
@@ -85,7 +94,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         marginBottom: 25,
     },
-    
+
     radioContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -118,3 +127,15 @@ const styles = StyleSheet.create({
         borderColor: "orange"
     }
 })
+
+// createUserWithEmailAndPassword(auth, email, password)
+//     .then((userCredential) => {
+//         // signed in
+//         const user = userCredential.user;
+//         console.log("User Created", user);
+//         // Then we create the profile in the database
+//     })
+//     .catch((error) => {
+//         const errorCode = error.code;
+//         const errorMessage = error.message;
+//     })
